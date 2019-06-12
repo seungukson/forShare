@@ -1,5 +1,8 @@
 #include "pch.h"
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 int GCD(int a, int b)
 {
@@ -11,26 +14,37 @@ int GCD(int a, int b)
 int N;
 const int SIZE = 100010;
 int arr[SIZE];
-
+int difarr[SIZE];
 int main()
 {
+	//freopen("output.txt", "r", stdin);
 	scanf("%d", &N);
 	for (int i = 0; i < N; ++i)
 	{
 		scanf("%d", &arr[i]);
 	}
-	int mini = 1000100;
-	int maxi = -1;
 
+	
+	int max_gcd = arr[1]-arr[0];
+	int mindif = 2000000000;
 	for (int i = 1; i < N; ++i)
 	{
-		if (mini > arr[i] - arr[i - 1])
-			mini = arr[i] - arr[i - 1];
-		if (maxi < arr[i] - arr[i - 1])
-			maxi = arr[i] - arr[i - 1];
+		
+		int dif = arr[i] - arr[i - 1];
+		difarr[i - 1] = dif;
+		if (max_gcd < dif)
+			max_gcd = GCD(max_gcd, dif);
+		else
+			max_gcd = GCD(dif, max_gcd);
 	}
-	int ans =GCD(mini, maxi);
+	int ans = 0;
+	for (int i = 0; i < N - 1; ++i)
+	{
+		ans += (difarr[i] / max_gcd)-1;
+	}
 	printf("%d",ans);
+
+
 
 	return 0;
 
